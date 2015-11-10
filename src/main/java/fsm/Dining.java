@@ -1,7 +1,5 @@
 package fsm;
 
-import static fsm.Philosopher.Think;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +19,6 @@ public class Dining {
         for (int i = 0; i < 5; i++)
             philosophers.add(system.actorOf(Props.create(Philosopher.class, "Philosopher_" + i, chopsticks.get(i), chopsticks.get((i + 1) % 5)), "Philosopher_" + i));
 
-        philosophers.stream().forEach(philosopher -> philosopher.tell(Think, ActorRef.noSender()));
+        philosophers.stream().forEach(philosopher -> philosopher.tell(Philosopher.Events.Think, ActorRef.noSender()));
     }
 }

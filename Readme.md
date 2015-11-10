@@ -1,7 +1,6 @@
 Dining philosophers problem using Akka with FSM.
 
-
-// Clean and Compile
+// Clean and compile
 
 sbt clean compile
 
@@ -9,7 +8,7 @@ sbt clean compile
 
 sbt run
 
-// Build Eclipse Project
+// Build Eclipse project
 
 sbt eclipse:clean eclipse
 

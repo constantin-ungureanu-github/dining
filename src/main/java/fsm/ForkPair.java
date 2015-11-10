@@ -9,22 +9,23 @@ import fsm.ForkPair.States;
 import fsm.ForkPair.TakenBy;
 
 public class ForkPair extends AbstractFSM<States, TakenBy> {
-    {
-        startWith(Available, new TakenBy(null));
-        when(Available, matchEventEquals(pickUp, (take, data) -> goTo(Taken).using(new TakenBy(sender())).replying(new Taken(self()))));
-        when(Taken, matchEventEquals(pickUp, (take, data) -> stay().replying(new Busy(self()))).event((event, data) -> (event == putDown) && (data.philosopher == sender()), (event, data) -> goTo(Available).using(new TakenBy(null))));
-        initialize();
-    }
-
-    public static enum States {
+    public enum States {
         Available, Taken
     }
 
-    public static final Object putDown = new Object() {
-    };
+    public enum Events {
+        Release, Aquire
+    }
 
-    public static final Object pickUp = new Object() {
-    };
+    {
+        startWith(Available, new TakenBy(null));
+
+        when(Available, matchEventEquals(Events.Aquire, (take, data) -> goTo(Taken).using(new TakenBy(sender())).replying(new Taken(self()))));
+
+        when(Taken, matchEventEquals(Events.Aquire, (take, data) -> stay().replying(new Busy(self())))
+                .event((event, data) -> (event == Events.Release) && (data.philosopher == sender()), (event, data) -> goTo(Available).using(new TakenBy(null))));
+        initialize();
+    }
 
     public static final class TakenBy {
         public final ActorRef philosopher;
